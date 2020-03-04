@@ -15,7 +15,9 @@ import { IToken } from '../../interfaces/IToken';
 import { ChangePasswordDto } from './dto/ChangePasswordDto';
 import { TokenService } from '../../shared/services/token.service';
 import { TOKEN_REASONS } from '../../common/constants/token-reason';
-import { RecourseIsInvalidException } from '../../exceptions/recourse-is-invalid.exception';
+import { ResourceIsInvalidException } from '../../exceptions/recourse-is-invalid.exception';
+import { ConfirmPasswordDto } from './dto/ConfirmPasswordDto';
+import { PermissionDeniedException } from '../../exceptions/permission-denied-exception';
 
 @Injectable()
 export class AuthService {
@@ -64,14 +66,15 @@ export class AuthService {
       }
       const tokenInfo: IToken = this.utilService.createToken();
       await this.tokenService.create(user.id, tokenInfo, TOKEN_REASONS.RESET_PASSWORD);
-      await this.mailService.sendMail(email, {
-        template: "d-307803cbe66e4ac88691e1ddbf3b5678",
-        templateData: {forgotPasswordConfirmationLink: this.mailService.getForgotPasswordConfirmationUrl("http://localhost:3000", tokenInfo.token)}
-      });
+      await this.mailService.sendResetPasswordEmail(email, tokenInfo.token);
   }
 
-  async verifyPassword(data: any): Promise<any>{
-    throw new RecourseIsInvalidException("Token")
+  async resetPasswordVerify(data: ConfirmPasswordDto): Promise<any>{
+     const tokenData = await this.tokenService.getByTokenAndReason(data.token, TOKEN_REASONS.RESET_PASSWORD);
+     if(!tokenData) throw new ResourceIsInvalidException("Token");
+     const user: any = await this.userService.findOne({id: tokenData.userId}); //todo
+     await this.userService.updateById(user.id, { password: this.utilService.generateHash(data.password)});
+     await this.tokenService.removeById(user.id);
   }
 
   async changePassword(user: User, changePasswordDto: ChangePasswordDto): Promise<any> {

@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       expiration: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       reason: {
         type: Sequelize.STRING
@@ -37,21 +37,7 @@ module.exports = {
       }
     });
   },
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.dropTable('Users_Tokens');
   }
 };
-
-// tb.string("token").nullable();
-// tb.string("expiration").nullable();
-// tb.enum('reason', USER_TOKEN_REASONS);
-// tb.string("displayName", 45);
-// tb.string("email", 256);
-// tb.integer("workspaceId");
-// tb.integer("userId")
-//   .unsigned().index()
-//   .references("id")
-//   .inTable("users")
-//   .onDelete("CASCADE")
-//   .onUpdate("CASCADE");
-// tb.timestamps(true, true);

@@ -10,9 +10,9 @@ import {
 import { IDefineOptions } from 'sequelize-typescript/lib/interfaces/IDefineOptions';
 import { TOKEN_REASONS } from '../common/constants/token-reason';
 import { User } from './User';
+import { Global } from '@nestjs/common';
 
 const tableOptions: IDefineOptions = { timestamps: true } as IDefineOptions;
-
 
 @Table(tableOptions)
 export class Users_Tokens extends Model<Users_Tokens> {
@@ -29,13 +29,12 @@ export class Users_Tokens extends Model<Users_Tokens> {
   token: string;
 
   @Column
-  expiration: number;
+  expiration: string;
 
   @Column
   reason: TOKEN_REASONS;
 
-  // @BelongsTo(() => User)
-  // @ForeignKey(() => User)
   @Column
+  @ForeignKey(() => User)
   userId: number;
 }

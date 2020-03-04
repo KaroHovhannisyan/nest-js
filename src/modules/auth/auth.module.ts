@@ -9,6 +9,7 @@ import { ConfigService } from '../../shared/services/config.service';
 import { MailService } from '../../shared/services/mail-service';
 import { UtilsService } from '../../providers/utils.service';
 import { TokenService } from '../../shared/services/token.service';
+import { HandlebarsAdapter, MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
@@ -18,6 +19,20 @@ import { TokenService } from '../../shared/services/token.service';
       secret: "supersecret",
       signOptions: { expiresIn: '2h' },
     }),
+    MailerModule.forRoot({
+      transport: 'smtps://dev1@ayscan.de:dZzH4nBoL9EEW7NJ@sslout.df.eu',
+      defaults: {
+        from:'dev1@ayscan.de',
+      },
+      template: {
+        dir: __dirname + '/templates',
+        adapter: new HandlebarsAdapter(), // or new PugAdapter()
+        options: {
+          strict: true
+        },
+      },
+    }),
+
   ],
   controllers: [AuthController],
   providers: [...authProviders, ConfigService, JwtStrategy, MailService, UtilsService, TokenService],

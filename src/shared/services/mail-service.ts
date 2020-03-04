@@ -1,37 +1,49 @@
-import {ServiceUnavailableException} from '@nestjs/common';
-const sgMail = require('@sendgrid/mail');
+import { Injectable } from '@nestjs/common';
+import { MailerService  as NestMailerService} from '@nestjs-modules/mailer';
 
+@Injectable()
 export class MailService {
-  constructor(){
-    sgMail.setApiKey();
-  }
-  async sendMail(to: any, options: any) {
-    let defaultOptions = { html: false, ...options };
-    try {
-      const msg: any = {
+  constructor(private readonly mailerService: NestMailerService) {}
+  public async sendResetPasswordEmail(to: string, token: string): Promise<any> {
+    return await this
+      .mailerService
+      .sendMail({
         to,
-        from: {
-          name: "AYSCAN",
-          email: "ayscan@gmail.com"
-        },
-        subject: options.subject || undefined,
-        templateId: options.template || undefined,
-        dynamic_template_data: options.templateData || undefined,
-      };
-
-      // if (defaultOptions.html) {
-      //   msg.html = message;
-      // } else if (defaultOptions.text) {
-      //   msg.text = message;
-      // }
-
-      return await sgMail.send(msg);
-    } catch(e) {
-      throw new ServiceUnavailableException(e);
-    }
+        from: 'dev1@ayscan.de',
+        subject: 'Reset your password ✔',
+        html: `<span>Token is ${token}</span>`,
+      })
   }
 
-  getForgotPasswordConfirmationUrl(url, token) {
-    return url + "/reset-password/confirm?token=" + token;
+  public withHandleBar(): void {
+    this
+      .mailerService
+      .sendMail({
+        to: 'test@nestjs.com',
+        from: 'noreply@nestjs.com',
+        subject: 'Testing Nest Mailermodule with template ✔',
+        template: 'welcome', // The `.pug` or `.hbs` extension is appended automatically.
+        context: {  // Data to be sent to template engine.
+          code: 'cf1a3f828287',
+          username: 'john doe',
+        },
+      })
+  }
+
+  public example3(to): void {
+    this
+      .mailerService
+      .sendMail({
+        to,
+        from: 'dev1@ayscan.de',
+        subject: 'Reset your password ✔',
+        template: __dirname + '/welcome', // The `.pug` or `.hbs` extension is appended automatically.
+        context: {  // Data to be sent to template engine.
+          code: 'cf1a3f828287',
+          username: 'john doe',
+        },
+      })
+      .then(() => {})
+      .catch(() => {});
   }
 }

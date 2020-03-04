@@ -55,12 +55,12 @@ export class AuthController {
     return await this.authService.resetPassword(email);
   }
 
-  @Post('verify-password')
+  @Post('reset-password/verify')
   @ApiOkResponse({ type: ResetPasswordDto, description: 'Reset password for user' })
-  public async verifyPassword(
+  public async resetPasswordVerify(
     @Body() data: ConfirmPasswordDto,
   ) {
-    return await this.authService.verifyPassword(data);
+    return await this.authService.resetPasswordVerify(data);
   }
 
   @Post('change-password')
