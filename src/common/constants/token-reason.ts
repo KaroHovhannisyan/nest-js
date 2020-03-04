@@ -1,0 +1,3 @@
+export enum TOKEN_REASONS {
+  RESET_PASSWORD ='RESET_PASSWORD'
+}
