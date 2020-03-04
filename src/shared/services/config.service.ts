@@ -16,11 +16,11 @@ export class ConfigService {
   }
 
   public get(key: string): string {
-    const config  = process.env[key];
-    if(config){
-        throw new Error(`${key} not found!!!`)
+    const config = process.env[key];
+    if (config) {
+      throw new Error(`${key} not found!!!`);
     }
-    return config
+    return config;
   }
 
   public getNumber(key: string): number {

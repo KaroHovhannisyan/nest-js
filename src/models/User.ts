@@ -65,7 +65,16 @@ export class User extends Model<User> {
   }
 
   getPublicFields() {
-    const { email, name, company, zip, street, phone, country, imageUrl } = this;
+    const {
+      email,
+      name,
+      company,
+      zip,
+      street,
+      phone,
+      country,
+      imageUrl,
+    } = this;
     return {
       email,
       name,
@@ -74,7 +83,7 @@ export class User extends Model<User> {
       street,
       phone,
       country,
-      imageUrl
-    }
+      imageUrl,
+    };
   }
 }

@@ -11,12 +11,12 @@ export class TokenService {
     private readonly usersTokensRepo: typeof Users_Tokens,
   ) {}
 
-  async create(userId, tokenInfo, reason): Promise<Users_Tokens>{
+  async create(userId, tokenInfo, reason): Promise<Users_Tokens> {
     let attributes = {
       userId,
       token: tokenInfo.token,
-      expiration: moment(tokenInfo.exp).format("YYYY-MM-DD HH:mm:ss"),
-      reason
+      expiration: moment(tokenInfo.exp).format('YYYY-MM-DD HH:mm:ss'),
+      reason,
     };
 
     return await this.usersTokensRepo.create(attributes);
@@ -25,14 +25,14 @@ export class TokenService {
   }
 
   async removeById(id): Promise<UserDto | null> {
-    return await this.usersTokensRepo.destroy({ where: {id} });
+    return await this.usersTokensRepo.destroy({ where: { id } });
   }
 
   async findOne(findData: any): Promise<UserDto | null> {
     return await this.usersTokensRepo.findOne({ where: findData });
   }
 
-   public async getByTokenAndReason(token, reason): Promise<any>  {
-     return await this.findOne( {token, reason});
-   }
+  public async getByTokenAndReason(token, reason): Promise<any> {
+    return await this.findOne({ token, reason });
+  }
 }

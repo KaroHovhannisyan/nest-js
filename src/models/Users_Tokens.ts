@@ -3,7 +3,8 @@ import {
   Column,
   Model,
   DataType,
-  BelongsTo, ForeignKey,
+  BelongsTo,
+  ForeignKey,
 } from 'sequelize-typescript';
 
 // @ts-ignore

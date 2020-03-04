@@ -16,25 +16,31 @@ import { HandlebarsAdapter, MailerModule } from '@nestjs-modules/mailer';
     forwardRef(() => UserModule),
     PassportModule,
     JwtModule.register({
-      secret: "supersecret",
+      secret: 'supersecret',
       signOptions: { expiresIn: '2h' },
     }),
     MailerModule.forRoot({
       transport: 'smtps://dev1@ayscan.de:dZzH4nBoL9EEW7NJ@sslout.df.eu',
       defaults: {
-        from:'dev1@ayscan.de',
+        from: 'dev1@ayscan.de',
       },
       template: {
         dir: __dirname + '/templates',
         adapter: new HandlebarsAdapter(), // or new PugAdapter()
         options: {
-          strict: true
+          strict: true,
         },
       },
     }),
-
   ],
   controllers: [AuthController],
-  providers: [...authProviders, ConfigService, JwtStrategy, MailService, UtilsService, TokenService],
+  providers: [
+    ...authProviders,
+    ConfigService,
+    JwtStrategy,
+    MailService,
+    UtilsService,
+    TokenService,
+  ],
 })
 export class AuthModule {}

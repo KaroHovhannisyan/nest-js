@@ -27,19 +27,22 @@ export class UserService {
    * @param newValues
    */
 
-  async updateById(id: number, newValues: any): Promise<User | null> { //todo
-   return await this.userRepository.update(
-       newValues,
-      {returning: true, where: {id}});
+  async updateById(id: number, newValues: any): Promise<User | null> {
+    //todo
+    return await this.userRepository.update(newValues, {
+      returning: true,
+      where: { id },
+    });
   }
 
   async create(userRegisterDto: UserRegisterDto): Promise<User> {
     return await this.userRepository.create<User>(userRegisterDto);
   }
 
-  async changeUserProfile(user: User, data: any): Promise<User> { // todo
-     await this.updateById(user.id, data);
-     return data
+  async changeUserProfile(user: User, data: any): Promise<User> {
+    // todo
+    await this.updateById(user.id, data);
+    return data;
   }
 
   async uploadImage(user, file): Promise<any> {
@@ -48,11 +51,12 @@ export class UserService {
       throw new FileNotImageException();
     }
     if (file) {
-      console.log(file)
+      console.log(file);
     }
     //todo
-    imageUrl = "https://cdn.iconscout.com/icon/free/png-256/avatar-380-456332.png";
+    imageUrl =
+      'https://cdn.iconscout.com/icon/free/png-256/avatar-380-456332.png';
     // await this.updateById(user.id, {imageUrl});
-    return imageUrl
+    return imageUrl;
   }
 }

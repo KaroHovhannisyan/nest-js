@@ -22,7 +22,6 @@ export class UserDto extends AbstractDto {
   @ApiPropertyOptional()
   password: string;
 
-
   constructor(user: User) {
     super(user);
     this.name = user.name;

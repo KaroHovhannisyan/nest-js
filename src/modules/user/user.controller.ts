@@ -3,9 +3,22 @@ import {
   HttpStatus,
   HttpCode,
   Body,
-  Post, UseGuards, Get, Patch, Delete, UploadedFile, UseInterceptors, Param, Res,
+  Post,
+  UseGuards,
+  Get,
+  Patch,
+  Delete,
+  UploadedFile,
+  UseInterceptors,
+  Param,
+  Res,
 } from '@nestjs/common';
-import { ApiTags, ApiOkResponse, ApiBadRequestResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOkResponse,
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { UserDto } from './dto/UserDto';
 import { User } from '../../models/User';
 import { UserService } from './user.service';
@@ -34,7 +47,6 @@ import { UserUpdateDto } from './dto/UserUpdateDto';
 //   callback(null, `${name}-${randomName}${fileExtName}`);
 // };
 
-
 @ApiTags('Users')
 @Controller('users')
 export class UserController {
@@ -52,10 +64,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: ChangePasswordDto, description: 'Change user info' })
-  public async updateInfo(
-    @Body() updateAbleData: any,
-    @AuthUser() user: User
-  ) {
+  public async updateInfo(@Body() updateAbleData: any, @AuthUser() user: User) {
     // console.log(updateAbleData, "updateAbleData");
     // return updateAbleData
     return await this.userService.changeUserProfile(user, updateAbleData);
@@ -65,13 +74,12 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiImplicitFile({ name: 'avatar', required: true })
-  @UseInterceptors(FileInterceptor('avatar' ))
+  @UseInterceptors(FileInterceptor('avatar'))
   @ApiOkResponse({ type: String, description: 'Uploaded image url' })
   public async uploadImage(
     @UploadedFile() file: IFile,
-    @AuthUser() user: User
+    @AuthUser() user: User,
   ) {
     return await this.userService.uploadImage(user, file);
   }
-
 }

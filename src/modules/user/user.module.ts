@@ -14,10 +14,17 @@ import { MulterModule } from '@nestjs/platform-express';
     forwardRef(() => AuthModule),
     MulterModule.register({
       dest: './files',
-    })
+    }),
   ],
   exports: [UserService],
   controllers: [UserController],
-  providers: [UserService, UtilsService, ValidatorService, ConfigService, GeneratorService, ...userProviders],
+  providers: [
+    UserService,
+    UtilsService,
+    ValidatorService,
+    ConfigService,
+    GeneratorService,
+    ...userProviders,
+  ],
 })
 export class UserModule {}
