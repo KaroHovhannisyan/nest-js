@@ -13,7 +13,7 @@ import { MulterModule } from '@nestjs/platform-express';
   imports: [
     forwardRef(() => AuthModule),
     MulterModule.register({
-      dest: './files',
+      dest: './uploads',
     }),
   ],
   exports: [UserService],

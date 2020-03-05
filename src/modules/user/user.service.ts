@@ -5,11 +5,13 @@ import { UserDto } from './dto/UserDto';
 import { ValidatorService } from '../../shared/services/validator.service';
 import { FileNotImageException } from '../../exceptions/file-not-image.exception';
 import { UserUpdateDto } from './dto/UserUpdateDto';
+import { IFile } from '../../interfaces/IFile';
 
 @Injectable()
 export class UserService {
+  SERVER_URL:  string  =  "http://localhost:3000/";
   constructor(
-    @Inject('UserRepository')
+  @Inject('UserRepository')
     private readonly userRepository: typeof User,
     public readonly validatorService: ValidatorService,
   ) {}
@@ -40,23 +42,13 @@ export class UserService {
   }
 
   async changeUserProfile(user: User, data: any): Promise<User> {
-    // todo
+    //todo
     await this.updateById(user.id, data);
     return data;
   }
 
-  async uploadImage(user, file): Promise<any> {
-    let imageUrl: string | null;
-    if (file && !this.validatorService.isImage(file.mimetype)) {
-      throw new FileNotImageException();
-    }
-    if (file) {
-      console.log(file);
-    }
-    //todo
-    imageUrl =
-      'https://cdn.iconscout.com/icon/free/png-256/avatar-380-456332.png';
-    // await this.updateById(user.id, {imageUrl});
-    return imageUrl;
+  async uploadImage(user: User, file: IFile): Promise<string> {
+    await this.updateById(user.id, {imageUrl: `${file.path}`});
+    return file.path;
   }
 }
