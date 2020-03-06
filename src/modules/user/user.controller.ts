@@ -31,6 +31,10 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UserUpdateDto } from './dto/UserUpdateDto';
 import { extname } from  'path';
 import { diskStorage } from  'multer';
+import { RolesGuard } from '../../guards/roles.guard';
+import { Roles } from '../../decorators/roles.decorator';
+import { RoleType } from '../../common/constants';
+import { AdminActions } from '../../decorators/admin-actions';
 
 export const imageFileFilter = (req, file, callback) => {
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
@@ -70,24 +74,13 @@ export class UserController {
     return await this.userService.changeUserProfile(user, updateAbleData);
   }
 
-  // @Post('upload-image')
-  //   // @UseGuards(JwtAuthGuard)
-  //   // @ApiBearerAuth()
-  //   // @ApiImplicitFile({ name: 'avatar', required: true })
-  //   // @UseInterceptors(FileInterceptor('avatar'))
-  //   // @ApiOkResponse({ type: String, description: 'Uploaded image url' })
-  //   // public async uploadImage(
-  //   //   @UploadedFile() file: IFile,
-  //   //   @AuthUser() user: User,
-  //   // ) {
-  //   //   return await this.userService.uploadImage(user, file);
-  //   // }
+
 
   @Post('upload-image')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiImplicitFile({ name: 'avatar', required: true })
-  @UseInterceptors(FileInterceptor('avatar',
+  @UseInterceptors(FileInterceptor('avatar', //todo use interceptor for this
     {
       storage: diskStorage({
         destination: './uploads/avatars',
@@ -107,14 +100,47 @@ export class UserController {
     return await this.userService.uploadImage(user, file);
   }
 
-  /**
-   *
-   */
-
   @Get('avatars/:fileId')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async serveAvatar(@Param('fileId') fileId, @Res() res): Promise<any> {
     res.sendFile(fileId, { root: 'avatars'});
   }
+
+  /**
+   * Admin actions
+   */
+
+  @Get('')
+  @Roles(RoleType.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: Array, description: 'Uploaded image url' })
+  async getUsersList(): Promise<any> { //todo
+    return await this.userService.getAll()
+  }
+
+  @Get('/:userId')
+  @Roles(RoleType.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: User, description: 'Get user' })
+  async getUser(
+    @Param("userId") id: number
+  ): Promise<User> {
+    return await this.userService.findOne({id})
+  }
+
+  @Patch('/:userId')
+  @Roles(RoleType.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: User, description: 'Update user' })
+  async updateUser(
+    @Body() data: any, //todo
+    @Param("userId") id: number
+  ): Promise<User> {
+    return await this.userService.update(id, data)
+  }
+
 }

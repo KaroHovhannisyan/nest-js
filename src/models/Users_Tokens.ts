@@ -9,9 +9,8 @@ import {
 
 // @ts-ignore
 import { IDefineOptions } from 'sequelize-typescript/lib/interfaces/IDefineOptions';
-import { TOKEN_REASONS } from '../common/constants/token-reason';
+import { TOKEN_REASONS } from '../common/constants';
 import { User } from './User';
-import { Global } from '@nestjs/common';
 
 const tableOptions: IDefineOptions = { timestamps: true } as IDefineOptions;
 

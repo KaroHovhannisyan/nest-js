@@ -12,8 +12,8 @@ import { JwtService } from '@nestjs/jwt';
 import { RecourseNotExistsException } from '../../exceptions/recourse-not-exists.exception';
 import { IToken } from '../../interfaces/IToken';
 import { ChangePasswordDto } from './dto/ChangePasswordDto';
-import { AbstractService, MailService, TokenService } from '../../shared/services';
-import { TOKEN_REASONS } from '../../common/constants/token-reason';
+import { MailService, TokenService } from '../../shared/services';
+import { TOKEN_REASONS } from '../../common/constants';
 import { ResourceIsInvalidException } from '../../exceptions/recourse-is-invalid.exception';
 import { ConfirmPasswordDto } from './dto/ConfirmPasswordDto';
 

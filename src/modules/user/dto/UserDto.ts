@@ -2,7 +2,7 @@
 
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
-import { RoleType } from '../../../common/constants/role-type';
+import { RoleType } from '../../../common/constants';
 import { AbstractDto } from '../../../common/dto/AbstractDto';
 import { User } from '../../../models/User';
 

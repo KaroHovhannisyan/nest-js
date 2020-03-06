@@ -1,5 +1,5 @@
 import { Model, Repository } from 'sequelize-typescript';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { IAbstractService, IFindOptions } from '../../interfaces/IAbstractService';
 import {
   DestroyOptions,
@@ -10,11 +10,13 @@ import {
   FindOrCreateOptions
 } from 'sequelize';
 import { BaseException } from '../../exceptions/base.exception';
+import { RecourseNotExistsException } from '../../exceptions/recourse-not-exists.exception';
 
 @Injectable()
 export default abstract class AbstractService<T extends Model<T>> implements IAbstractService<T> {
   protected constructor(private readonly repository: Repository<T>) {}
 
+  // @ts-ignore
   async getAll(
     {
       where = {},
@@ -25,9 +27,14 @@ export default abstract class AbstractService<T extends Model<T>> implements IAb
       raw = false,
     }: IFindOptions = {},
     include: IncludeOptions[] = [],
-  ): Promise<T[]> {
+  ): Promise<{
+    data: T[],
+    limit: number,
+    offset: number,
+    count: number
+  }> {
     try {
-      return this.repository.findAll({
+      const data = await this.repository.findAll({
         where,
         order,
         attributes,
@@ -36,6 +43,13 @@ export default abstract class AbstractService<T extends Model<T>> implements IAb
         include,
         raw,
       });
+
+      return {
+         data,
+         limit,
+         offset,
+         count: 100 //todo
+      }
     } catch (e) {
       this.throwError("GET_ALL", e)
     }
@@ -54,7 +68,7 @@ export default abstract class AbstractService<T extends Model<T>> implements IAb
         include,
       });
     } catch (e) {
-      this.throwError("get", e)
+      this.throwError("GET", e)
 
     }
   }
@@ -77,7 +91,7 @@ export default abstract class AbstractService<T extends Model<T>> implements IAb
 
       return instance;
     } catch (e) {
-      this.throwError("create", e)
+      this.throwError("CREATE", e)
 
     }
   }
@@ -117,7 +131,11 @@ export default abstract class AbstractService<T extends Model<T>> implements IAb
   }
 
   async findOne(findData: any): Promise<T> {
-    return await this.repository.findOne({ where: findData });
+    const data =  await this.repository.findOne({ where: findData });
+    if(!data){
+      throw new RecourseNotExistsException("Data")
+    }
+    return data;
   }
 
   throwError(operationName, e){

@@ -7,7 +7,7 @@ import {
   Unique,
   Default,
 } from 'sequelize-typescript';
-import { RoleType } from '../common/constants/role-type';
+import { RoleType } from '../common/constants';
 import { UtilsService } from '../providers/utils.service';
 // @ts-ignore
 import { IDefineOptions } from 'sequelize-typescript/lib/interfaces/IDefineOptions';
