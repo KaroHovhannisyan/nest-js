@@ -35,7 +35,7 @@ lerna-debug.log*
 
 
 # Uploads
-.uploads
+.uploads/
 
 # Project Env
 .env
