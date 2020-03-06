@@ -22,7 +22,7 @@ module.exports = {
         unique: true
       },
       role: {
-        type: Sequelize.ENUM(["ADMIN", "USER"])
+        type: Sequelize.ENUM(["PUBLISHER", "USER"])
       },
       password: {
         type: Sequelize.STRING

@@ -30,7 +30,7 @@ export class User extends Model<User> {
   @Column
   name: string;
 
-  @Default(RoleType.USER)
+  @Default(RoleType.PUBLISHER)
   @Column
   role: RoleType;
 
@@ -74,6 +74,7 @@ export class User extends Model<User> {
       phone,
       country,
       imageUrl,
+      role
     } = this;
     return {
       email,
@@ -84,6 +85,7 @@ export class User extends Model<User> {
       phone,
       country,
       imageUrl,
+      role
     };
   }
 }

@@ -87,7 +87,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiImplicitFile({ name: 'avatar', required: true })
-  @UseInterceptors(FileInterceptor('file',
+  @UseInterceptors(FileInterceptor('avatar',
     {
       storage: diskStorage({
         destination: './uploads/avatars',
