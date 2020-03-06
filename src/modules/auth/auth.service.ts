@@ -10,17 +10,15 @@ import { UtilsService } from '../../providers/utils.service';
 import { UserNotFoundException } from '../../exceptions/user-not-found.exception';
 import { JwtService } from '@nestjs/jwt';
 import { RecourseNotExistsException } from '../../exceptions/recourse-not-exists.exception';
-import { MailService } from '../../shared/services/mail-service';
 import { IToken } from '../../interfaces/IToken';
 import { ChangePasswordDto } from './dto/ChangePasswordDto';
-import { TokenService } from '../../shared/services/token.service';
+import { AbstractService, MailService, TokenService } from '../../shared/services';
 import { TOKEN_REASONS } from '../../common/constants/token-reason';
 import { ResourceIsInvalidException } from '../../exceptions/recourse-is-invalid.exception';
 import { ConfirmPasswordDto } from './dto/ConfirmPasswordDto';
-import { PermissionDeniedException } from '../../exceptions/permission-denied-exception';
 
 @Injectable()
-export class AuthService {
+export class AuthService{
   constructor(
     public readonly userService: UserService,
     public readonly jwtService: JwtService,
@@ -39,14 +37,15 @@ export class AuthService {
 
   async createToken(user: User | UserDto): Promise<TokenPayloadDto> {
     return new TokenPayloadDto({
-      accessToken: await this.jwtService.signAsync({ id: user.id }),
+      accessToken: await this.jwtService.signAsync({ id: user.id }, {expiresIn: "30d"}),
+      refreshToken: await this.jwtService.signAsync({ id: user.id }),
     });
   }
 
   async validateUser(
     userLoginDto: UserLoginDto,
     errorMessage?: string,
-  ): Promise<UserDto> {
+  ): Promise<User> {
     const user = await this.userService.findOne({
       email: userLoginDto.email,
     });
@@ -54,7 +53,6 @@ export class AuthService {
       userLoginDto.password,
       user && user.password,
     );
-    console.log(isPasswordValid, user);
     if (!user || !isPasswordValid) {
       throw new UserNotFoundException(
         errorMessage || 'Wrong email or password',
@@ -83,8 +81,8 @@ export class AuthService {
       TOKEN_REASONS.RESET_PASSWORD,
     );
     if (!tokenData) throw new ResourceIsInvalidException('Token');
-    const user: any = await this.userService.findOne({ id: tokenData.userId }); //todo
-    await this.userService.updateById(user.id, {
+    const user: User = await this.userService.findOne({ id: tokenData.userId });
+    await this.userService.update(user.id, {
       password: this.utilService.generateHash(data.password),
     });
     await this.tokenService.removeById(user.id);
@@ -99,7 +97,7 @@ export class AuthService {
       password: changePasswordDto.currentPassword,
     };
     await this.validateUser(userLoginDto, 'Wrong password');
-    await this.userService.updateById(user.id, {
+    await this.userService.update(user.id, {
       password: this.utilService.generateHash(changePasswordDto.newPassword),
     });
   }

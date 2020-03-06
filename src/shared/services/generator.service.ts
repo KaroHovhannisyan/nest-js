@@ -2,7 +2,7 @@ import * as uuid from 'uuid/v1';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class GeneratorService {
+export default class GeneratorService {
   public uuid(): string {
     return uuid();
   }

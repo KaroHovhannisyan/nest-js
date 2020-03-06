@@ -111,10 +111,10 @@ export class UserController {
    *
    */
 
-  // @Get('avatars/:fileId')
-  // @UseGuards(JwtAuthGuard)
-  // @ApiBearerAuth()
-  // async serveAvatar(@Param('fileId') fileId, @Res() res): Promise<any> {
-  //   res.sendFile(fileId, { root: 'avatars'});
-  // }
+  @Get('avatars/:fileId')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async serveAvatar(@Param('fileId') fileId, @Res() res): Promise<any> {
+    res.sendFile(fileId, { root: 'avatars'});
+  }
 }

@@ -1,9 +1,10 @@
 import { User } from '../../models/User';
-import { ValidatorService } from '../../shared/services/validator.service';
+import { ValidatorService } from '../../shared/services';
+import { USER_REPOSITORY } from '../../common/constants';
 
 export const userProviders = [
   {
-    provide: 'UserRepository',
+    provide: USER_REPOSITORY,
     useValue: User,
   },
   ValidatorService,

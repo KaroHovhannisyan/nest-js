@@ -16,6 +16,7 @@ export const databaseProviders = [
       });
       sequelize.addModels([User, Users_Tokens]);
       await sequelize.sync();
+      // await sequelize.sync({ force: true });
       return sequelize;
     },
   },

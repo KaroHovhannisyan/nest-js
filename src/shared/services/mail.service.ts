@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { MailerService as NestMailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
-export class MailService {
+export default class MailService {
   constructor(private readonly mailerService: NestMailerService) {}
   public async sendResetPasswordEmail(to: string, token: string): Promise<any> {
     return await this.mailerService.sendMail({

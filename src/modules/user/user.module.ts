@@ -4,9 +4,7 @@ import { userProviders } from './user.providers';
 import { AuthModule } from '../auth/auth.module';
 import { UtilsService } from '../../providers/utils.service';
 import { UserController } from './user.controller';
-import { ValidatorService } from '../../shared/services/validator.service';
-import { ConfigService } from '../../shared/services/config.service';
-import { GeneratorService } from '../../shared/services/generator.service';
+import { ValidatorService, ConfigService, GeneratorService } from '../../shared/services';
 import { MulterModule } from '@nestjs/platform-express';
 
 @Module({

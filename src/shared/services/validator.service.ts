@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 export const imageMimeTypes = ['image/jpeg', 'image/png'];
 
 @Injectable()
-export class ValidatorService {
+export default class ValidatorService {
   public isImage(mimeType: string): boolean {
     return _.includes(imageMimeTypes, mimeType);
   }

@@ -5,7 +5,6 @@ import {
   Body,
   Post,
   UseGuards,
-  Get,
 } from '@nestjs/common';
 import { UserRegisterDto } from './dto/UserRegisterDto';
 import {
@@ -47,7 +46,7 @@ export class AuthController {
   async userLogin(
     @Body() userLoginDto: UserLoginDto,
   ): Promise<LoginPayloadDto> {
-    const userEntity: UserDto = await this.authService.validateUser(
+    const userEntity: User = await this.authService.validateUser(
       userLoginDto,
     );
     const token = await this.authService.createToken(userEntity);

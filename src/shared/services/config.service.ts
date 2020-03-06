@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import { IAwsConfig } from '../../interfaces/IAwsConfig';
 
-export class ConfigService {
+export default class ConfigService {
   constructor() {
     dotenv.config({
       path: `.env`,

@@ -1,8 +1,7 @@
 import { Module, Global, HttpModule } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 
-import { ConfigService } from './services/config.service';
-import { ValidatorService } from './services/validator.service';
+import { ConfigService, ValidatorService } from './services';
 
 const providers = [ConfigService, ValidatorService];
 

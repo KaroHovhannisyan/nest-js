@@ -5,10 +5,8 @@ import { PassportModule } from '@nestjs/passport';
 import { UserModule } from '../user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
-import { ConfigService } from '../../shared/services/config.service';
-import { MailService } from '../../shared/services/mail-service';
+import { ConfigService, MailService, TokenService} from '../../shared/services';
 import { UtilsService } from '../../providers/utils.service';
-import { TokenService } from '../../shared/services/token.service';
 import { HandlebarsAdapter, MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
