@@ -44,18 +44,23 @@ export class User extends Model<User> {
   @Column
   password: string;
 
+  @Default("")
   @Column
   imageUrl: string;
 
+  @Default("")
   @Column
   street: string;
 
+  @Default("")
   @Column
   zip: string;
 
+  @Default("")
   @Column
   country: string;
 
+  @Default("")
   @Column
   phone: string;
 

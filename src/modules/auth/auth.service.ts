@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from '../../models/User';
 import { UserRegisterDto } from './dto/UserRegisterDto';
 import { UserService } from '../user/user.service';
@@ -16,6 +16,7 @@ import { MailService, TokenService } from '../../shared/services';
 import { TOKEN_REASONS } from '../../common/constants';
 import { ResourceIsInvalidException } from '../../exceptions/recourse-is-invalid.exception';
 import { ConfirmPasswordDto } from './dto/ConfirmPasswordDto';
+import { BaseException } from '../../exceptions/base.exception';
 
 @Injectable()
 export class AuthService{
@@ -31,7 +32,7 @@ export class AuthService{
     try {
       return await this.userService.create(userRegisterDto);
     } catch (e) {
-      throw new RecourseAlreadyExistsException('Email');
+      throw new BadRequestException(e.response.errors[0].message);
     }
   }
 

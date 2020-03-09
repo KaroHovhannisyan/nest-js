@@ -36,22 +36,22 @@ import { Roles } from '../../decorators/roles.decorator';
 import { RoleType } from '../../common/constants';
 import { AdminActions } from '../../decorators/admin-actions';
 
-export const imageFileFilter = (req, file, callback) => {
-  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-    return callback(new Error('Only image files are allowed!'), false);
-  }
-  callback(null, true);
-};
-
-export const editFileName = (req, file, callback) => {
-  const name = file.originalname.split('.')[0];
-  const fileExtName = extname(file.originalname);
-  const randomName = Array(4)
-    .fill(null)
-    .map(() => Math.round(Math.random() * 16).toString(16))
-    .join('');
-  callback(null, `${name}-${randomName}${fileExtName}`);
-};
+// export const imageFileFilter = (req, file, callback) => {
+//   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+//     return callback(new Error('Only image files are allowed!'), false);
+//   }
+//   callback(null, true);
+// };
+//
+// export const editFileName = (req, file, callback) => {
+//   const name = file.originalname.split('.')[0];
+//   const fileExtName = extname(file.originalname);
+//   const randomName = Array(4)
+//     .fill(null)
+//     .map(() => Math.round(Math.random() * 16).toString(16))
+//     .join('');
+//   callback(null, `${name}-${randomName}${fileExtName}`);
+// };
 
 @ApiTags('Users')
 @Controller('users')
@@ -115,7 +115,7 @@ export class UserController {
   @Roles(RoleType.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth()
-  @ApiOkResponse({ type: Array, description: 'Uploaded image url' })
+  @ApiOkResponse({ type: Array, description: 'Get all users' })
   async getUsersList(): Promise<any> { //todo
     return await this.userService.getAll()
   }

@@ -73,7 +73,7 @@ export default abstract class AbstractService<T extends Model<T>> implements IAb
     }
   }
 
-  async create(entity: object, where: WhereOptions = {}, transaction?: Transaction): Promise<T> {
+  async findOrCreate(entity: object, where: WhereOptions = {}, transaction?: Transaction): Promise<T> {
     try {
       const options: FindOrCreateOptions = {
         where,
@@ -91,8 +91,16 @@ export default abstract class AbstractService<T extends Model<T>> implements IAb
 
       return instance;
     } catch (e) {
-      this.throwError("CREATE", e)
+      this.throwError("FIND_OR_CREATE", e);
+    }
+  }
 
+
+  async create(entity: object): Promise<T> {
+    try {
+      return await this.repository.create(entity);
+    } catch (e) {
+      this.throwError("CREATE", e)
     }
   }
 
