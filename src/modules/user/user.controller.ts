@@ -131,6 +131,17 @@ export class UserController {
     return await this.userService.findOne({id})
   }
 
+  @Delete('/:userId')
+  @Roles(RoleType.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: User, description: 'Remove user' })
+  async deleteUser(
+    @Param("userId") id: number
+  ): Promise<User> {
+    return await this.userService.delete({where: {id}})
+  }
+
   @Patch('/:userId')
   @Roles(RoleType.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)

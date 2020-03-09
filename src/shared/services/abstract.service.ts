@@ -126,7 +126,7 @@ export default abstract class AbstractService<T extends Model<T>> implements IAb
     }
   }
 
-  async delete({ where = {} }, transaction?: Transaction): Promise<void> {
+  async delete({ where = {} }, transaction?: Transaction): Promise<any> {
     try {
       const options: DestroyOptions = { where };
       if (transaction) {
