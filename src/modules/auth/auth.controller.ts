@@ -4,7 +4,7 @@ import {
   HttpCode,
   Body,
   Post,
-  UseGuards,
+  UseGuards, Get, Param,
 } from '@nestjs/common';
 import { UserRegisterDto } from './dto/UserRegisterDto';
 import {
@@ -23,6 +23,10 @@ import { User } from '../../models/User';
 import { ResetPasswordDto } from './dto/ResetPasswordDto';
 import { ChangePasswordDto } from './dto/ChangePasswordDto';
 import { ConfirmPasswordDto } from './dto/ConfirmPasswordDto';
+import { Roles } from '../../decorators/roles.decorator';
+import { RoleType } from '../../common/constants';
+import { RolesGuard } from '../../guards/roles.guard';
+import { UserAddDto } from './dto/UserAddDto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -83,5 +87,20 @@ export class AuthController {
     @AuthUser() user: User,
   ) {
     return await this.authService.changePassword(user, changePasswordDto);
+  }
+
+  /**
+   * Admin actions
+   */
+
+  @Get('users/:userId/impersonate')
+  @Roles(RoleType.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: User, description: 'I' })
+  async addNewUser(
+    @Param("userId") id: number
+  ): Promise<User> {
+    return await this.authService.impersonate(id)
   }
 }

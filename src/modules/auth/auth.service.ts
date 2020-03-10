@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Body, Get, Injectable, Post, UseGuards } from '@nestjs/common';
 import { User } from '../../models/User';
 import { UserRegisterDto } from './dto/UserRegisterDto';
 import { UserService } from '../user/user.service';
@@ -13,10 +13,15 @@ import { RecourseNotExistsException } from '../../exceptions/recourse-not-exists
 import { IToken } from '../../interfaces/IToken';
 import { ChangePasswordDto } from './dto/ChangePasswordDto';
 import { MailService, TokenService } from '../../shared/services';
-import { TOKEN_REASONS } from '../../common/constants';
+import { RoleType, TOKEN_REASONS } from '../../common/constants';
 import { ResourceIsInvalidException } from '../../exceptions/recourse-is-invalid.exception';
 import { ConfirmPasswordDto } from './dto/ConfirmPasswordDto';
 import { BaseException } from '../../exceptions/base.exception';
+import { Roles } from '../../decorators/roles.decorator';
+import { JwtAuthGuard } from '../../guards/auth.guard';
+import { RolesGuard } from '../../guards/roles.guard';
+import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
+import { UserAddDto } from './dto/UserAddDto';
 
 @Injectable()
 export class AuthService{
@@ -38,8 +43,8 @@ export class AuthService{
 
   async createToken(user: User | UserDto): Promise<TokenPayloadDto> {
     return new TokenPayloadDto({
-      accessToken: await this.jwtService.signAsync({ id: user.id }, {expiresIn: "30d"}),
-      refreshToken: await this.jwtService.signAsync({ id: user.id }),
+      accessToken: await this.jwtService.signAsync({ id: user.id }),
+      refreshToken: await this.jwtService.signAsync({ id: user.id }, {expiresIn: "30d"}),
     });
   }
 
@@ -101,5 +106,10 @@ export class AuthService{
     await this.userService.update(user.id, {
       password: this.utilService.generateHash(changePasswordDto.newPassword),
     });
+  }
+
+  async impersonate(userId: number):Promise<any>{
+     const user = await this.userService.findOne({id: userId});
+     return await this.createToken(user);
   }
 }

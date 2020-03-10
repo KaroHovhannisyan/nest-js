@@ -35,6 +35,7 @@ import { RolesGuard } from '../../guards/roles.guard';
 import { Roles } from '../../decorators/roles.decorator';
 import { RoleType } from '../../common/constants';
 import { AdminActions } from '../../decorators/admin-actions';
+import { UserAddDto } from '../auth/dto/UserAddDto';
 
 // export const imageFileFilter = (req, file, callback) => {
 //   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
@@ -152,6 +153,17 @@ export class UserController {
     @Param("userId") id: number
   ): Promise<User> {
     return await this.userService.update(id, data)
+  }
+
+  @Post('/add')
+  @Roles(RoleType.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: User, description: 'Add new user for admin' })
+  async addNewUser(
+    @Body() data: UserAddDto,
+  ): Promise<User> {
+    return await this.userService.create(data)
   }
 
 }
