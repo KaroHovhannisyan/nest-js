@@ -97,7 +97,7 @@ export class AuthController {
   @Roles(RoleType.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth()
-  @ApiOkResponse({ type: User, description: 'I' })
+  @ApiOkResponse({ type: String, description: 'Token for current user' })
   async addNewUser(
     @Param("userId") id: number
   ): Promise<User> {

@@ -13,9 +13,12 @@ import { HandlebarsAdapter, MailerModule } from '@nestjs-modules/mailer';
   imports: [
     forwardRef(() => UserModule),
     PassportModule,
-    JwtModule.register({
-      secret: 'supersecret',
-      signOptions: { expiresIn: '2h' },
+    JwtModule.registerAsync({
+      useFactory: (configService: ConfigService) => ({
+        secret: "rxPhglGJWPlOW596",
+        signOptions: { expiresIn: '2h' }
+      }),
+      inject: [ConfigService],
     }),
     MailerModule.forRoot({
       transport: 'smtps://dev1@ayscan.de:dZzH4nBoL9EEW7NJ@sslout.df.eu',
@@ -24,7 +27,7 @@ import { HandlebarsAdapter, MailerModule } from '@nestjs-modules/mailer';
       },
       template: {
         dir: __dirname + '/templates',
-        adapter: new HandlebarsAdapter(), // or new PugAdapter()
+        adapter: new HandlebarsAdapter(),
         options: {
           strict: true,
         },

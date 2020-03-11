@@ -1,24 +1,19 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { setupSwagger } from './configs/viveo-swagger';
-import { ValidationPipe } from '@nestjs/common';
+import { setupValidation } from './configs/setup-validation';
+import { SharedModule } from './shared/shared.module';
+import { ConfigService } from './shared/services';
 
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   setupSwagger(app);
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      transform: true,
-      dismissDefaultMessages: true,
-      validationError: {
-        target: true,
-      },
-    }),
-  );
+  setupValidation(app);
   app.enableCors();
-  await app.listen(3000);
-  console.log(`App listen on port 3000`);
+  const configService = app.select(SharedModule).get(ConfigService);
+  const port = configService.getNumber('PORT');
+  await app.listen(port);
+  console.log(`App listen on port ${port}`);
 }
 bootstrap();

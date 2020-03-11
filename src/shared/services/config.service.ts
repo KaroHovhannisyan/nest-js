@@ -1,10 +1,10 @@
 import * as dotenv from 'dotenv';
-import { IAwsConfig } from '../../interfaces/IAwsConfig';
 
 export default class ConfigService {
   constructor() {
+    const nodeEnv = this.nodeEnv;
     dotenv.config({
-      path: `.env`,
+      path: `.${nodeEnv}.env`,
     });
 
     // Replace \\n with \n to support multiline strings in AWS
@@ -17,9 +17,9 @@ export default class ConfigService {
 
   public get(key: string): string {
     const config = process.env[key];
-    if (config) {
-      throw new Error(`${key} not found!!!`);
-    }
+    // if (config) {
+    //   throw new Error(`${key} not found!!!`);
+    // }
     return config;
   }
 
@@ -31,11 +31,14 @@ export default class ConfigService {
     return this.get('NODE_ENV') || 'development';
   }
 
-  get awsS3Config(): IAwsConfig {
+  get sequlizeConfigs(): any {
     return {
-      accessKeyId: this.get('AWS_S3_ACCESS_KEY_ID'),
-      secretAccessKey: this.get('AWS_S3_SECRET_ACCESS_KEY'),
-      bucketName: this.get('S3_BUCKET_NAME'),
-    };
+      dialect: 'postgres',
+      host: this.get('POSTGRES_HOST'),
+      port: this.getNumber('POSTGRES_PORT'),
+      username: this.get('POSTGRES_USERNAME'),
+      password: this.get('POSTGRES_PASSWORD'),
+      database: this.get('POSTGRES_DATABASE')
+    }
   }
 }

@@ -7,10 +7,13 @@ import { UserService } from '../user/user.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(public readonly userService: UserService) {
+  constructor(
+    public readonly userService: UserService
+
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'supersecret', //todo
+      secretOrKey: 'rxPhglGJWPlOW596', //todo
     });
   }
 
