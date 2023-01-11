@@ -34,7 +34,7 @@
     "@sendgrid/mail": "^6.5.3",
     "bcrypt": "^4.0.0",
     "class-transformer": "^0.2.3",
-    "class-validator": "^0.11.0",
+    "class-validator": "^0.14.0",
     "dotenv": "^8.2.0",
     "fastify": "^2.12.1",
     "fastify-multipart": "^1.0.5",
